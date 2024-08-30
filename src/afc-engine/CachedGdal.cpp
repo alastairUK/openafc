@@ -8,7 +8,7 @@
 #include "CachedGdal.h"
 #include <assert.h>
 #include <boost/filesystem.hpp>
-#include <fnmatch.h>
+//#include <fnmatch.h>
 #include <afclogging/Logging.h>
 #include <sstream>
 #include <stdexcept>
@@ -258,10 +258,10 @@ bool CachedGdalBase::forEachGdalInfo(
 	for (boost::filesystem::directory_iterator di(_fileOrDir);
 	     di != boost::filesystem::directory_iterator();
 	     ++di) {
-		std::string baseName = di->path().filename().native();
+		std::string baseName = di->path().filename().string();
 		// Skipping seen, nonmatching and nonfiles
 		if ((_gdalInfos.find(baseName) != _gdalInfos.end()) ||
-		    (fnmatch(fnmatch_pattern.c_str(), baseName.c_str(), 0) == FNM_NOMATCH) ||
+		    //(fnmatch(fnmatch_pattern.c_str(), baseName.c_str(), 0) == FNM_NOMATCH) ||
 		    (!boost::filesystem::is_regular_file(di->path()))) {
 			continue;
 		}
@@ -453,7 +453,7 @@ const CachedGdalBase::GdalDatasetHolder *CachedGdalBase::getGdalDatasetHolder(
 	auto ret = _gdalDsCache
 			   .add(baseName,
 				std::shared_ptr<GdalDatasetHolder>(
-					new GdalDatasetHolder(filePath.native())))
+					new GdalDatasetHolder(filePath.string())))
 			   ->get();
 	return ret;
 }

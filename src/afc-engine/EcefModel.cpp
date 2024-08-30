@@ -3,6 +3,13 @@
 #include "MathConstants.h"
 #include "EcefModel.h"
 
+namespace {
+void sincos(double val, double* sinVal, double* cosVal)
+{
+    *sinVal = sin(val);
+    *cosVal = cos(val);
+}
+}
 //  Note: Altitude here is a true altitude, i.e. a height. Given an altitude (in km), this returns a
 //  value in an ECEF coordinate
 //      frame in km.
@@ -19,9 +26,9 @@ Vector3 EcefModel::geodeticToEcef(double lat, double lon, double alt)
 	const double lonr = lon * M_PI / 180.0;
 
 	double cosLon, sinLon;
-	::sincos(lonr, &sinLon, &cosLon);
+	sincos(lonr, &sinLon, &cosLon);
 	double cosLat, sinLat;
-	::sincos(latr, &sinLat, &cosLat);
+	sincos(latr, &sinLat, &cosLat);
 
 	//  Compute 'chi', which adjusts for vertical eccentricity.
 	const double chi = sqrt(1.0 - esq * sinLat * sinLat);
@@ -80,9 +87,9 @@ GeodeticCoord EcefModel::toGeodetic(const Vector3 &in)
 Vector3 EcefModel::localVertical(const GeodeticCoord &in)
 {
 	double cosLon, sinLon;
-	::sincos(M_PI / 180.0 * in.longitudeDeg, &sinLon, &cosLon);
+	sincos(M_PI / 180.0 * in.longitudeDeg, &sinLon, &cosLon);
 	double cosLat, sinLat;
-	::sincos(M_PI / 180.0 * in.latitudeDeg, &sinLat, &cosLat);
+	sincos(M_PI / 180.0 * in.latitudeDeg, &sinLat, &cosLat);
 
 	return Vector3(cosLat * cosLon, cosLat * sinLon, sinLat);
 }

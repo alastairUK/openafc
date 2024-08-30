@@ -8,7 +8,7 @@
 
 #include "GdalNameMapper.h"
 #include <boost/filesystem.hpp>
-#include <fnmatch.h>
+//#include <fnmatch.h>
 #include <gdal_priv.h>
 #include <boost/regex.hpp>
 #include <sstream>
@@ -203,7 +203,7 @@ std::string GdalNameMapperPattern::nameFor(double latDeg, double lonDeg)
 		     ++di) {
 			std::string filename = di->path().filename().string();
 			if (boost::filesystem::is_regular_file(di->path()) &&
-			    (fnmatch(ret.c_str(), filename.c_str(), 0) != FNM_NOMATCH) &&
+			    //(fnmatch(ret.c_str(), filename.c_str(), 0) != FNM_NOMATCH) &&
 			    (candidate.empty() || (candidate < filename))) {
 				candidate = filename;
 			}
@@ -233,15 +233,14 @@ GdalNameMapperDirect::GdalNameMapperDirect(const std::string &fnmatchPattern,
 	for (boost::filesystem::directory_iterator di(directory);
 	     di != boost::filesystem::directory_iterator();
 	     ++di) {
-		std::string filename = di->path().filename().native();
-		if ((!boost::filesystem::is_regular_file(di->path())) ||
-		    (fnmatch(fnmatchPattern.c_str(), filename.c_str(), 0) == FNM_NOMATCH)) {
+		std::string filename = di->path().filename().string();
+		if ((!boost::filesystem::is_regular_file(di->path())) ) {
 			continue;
 		}
 		GDALDataset *gdalDataSet = nullptr;
 		try {
 			gdalDataSet = static_cast<GDALDataset *>(
-				GDALOpen(di->path().native().c_str(), GA_ReadOnly));
+				GDALOpen(di->path().string().c_str(), GA_ReadOnly));
 			_files.push_back(std::make_tuple(
 				GdalTransform(gdalDataSet, filename).makeBoundRect(),
 				filename));

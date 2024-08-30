@@ -16,6 +16,14 @@
 #include "gdal_priv.h"
 #include "cpl_conv.h" // for CPLMalloc()
 
+namespace {
+	void sincos(double val, double* sinVal, double* cosVal)
+	{
+		*sinVal = sin(val);
+		*cosVal = cos(val);
+	}
+}
+
 extern void point_to_point(double elev[],
 			   double tht_m,
 			   double rht_m,
