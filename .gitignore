@@ -6,6 +6,11 @@
 # of which is included with this software program.
 #
 
+.vs/
+_ReSharper.Caches/
+out/
+build-cl/
+
 *.bak
 *.*~
 *.swp
