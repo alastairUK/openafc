@@ -10,4 +10,5 @@ target_link_libraries(${TGT_NAME} PUBLIC Qt5::Core)
 target_link_libraries(${TGT_NAME} PUBLIC Qt5::Sql)
 
 target_link_libraries(${TGT_NAME} PUBLIC afclogging)
+target_link_libraries(${TGT_NAME} PUBLIC ratcommon)
 
